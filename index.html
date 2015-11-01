@@ -40,6 +40,10 @@
       var mc = new Hammer(document.getElementById('touch-area'));
       // mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
       // mc.get('swip').set({ direction: Hammer.DIRECTION_ALL });
+      var scroll = new Hammer.Pan({event: 'scroll', pointers: 2, direction: Hammer.DIRECTION_VERTICAL});
+
+      mc.add(scroll);
+
       socket.on('connect', function () {
         mc.on('tap', function () {
           socket.emit('click');
@@ -50,12 +54,15 @@
         });
 
         mc.on('swipeleft swiperight', function (event) {
-          if (event.type == 'swipeleft') {
-            socket.emit('previous');
+          event.type == 'swipeleft' ? socket.emit('previous') : socket.emit('next');
+        });
+
+        mc.on('scroll', function (event) {
+          if (event.deltaY == 0) {
+            return;
           }
-          else {
-            socket.emit('next');
-          }
+
+          event.deltaY < 0 ? socket.emit('scrollup') : socket.emit('scrolldown');
         });
       });
     </script>

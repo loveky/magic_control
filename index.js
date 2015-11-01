@@ -45,4 +45,16 @@ io.on('connection', (socket) => {
     log.debug('next');
     robot.keyTap('right');
   });
+
+  socket.on('scrollup', () => {
+    log.debug('scrollup');
+    robot.keyTap('up');
+    // robot.scrollMouse(50, "up");
+  });
+
+  socket.on('scrolldown', () => {
+    log.debug('scrolldown');
+    robot.keyTap('down');
+    // robot.scrollMouse(50, "down");
+  });
 });
