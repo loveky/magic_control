@@ -1,20 +1,22 @@
 var robot = require('robotjs');
 var Log = require('log');
 var fs = require('fs');
+var EventEmitter = require('events');
 
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 
 var log = new Log();
+var backend = new EventEmitter();
 
 app.listen(80);
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
+  fs.readFile(__dirname + '/client.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
-      return res.end('Error loading index.html');
+      return res.end('<h1>Something goes wrong!</h1>');
     }
 
     res.writeHead(200);
@@ -22,7 +24,18 @@ function handler (req, res) {
   });
 }
 
+var currentConnectionID = null;
+
 io.on('connection', (socket) => {
+
+  if (currentConnectionID !== null) {
+    // TODO 断开socket并返回错误信息
+    return;
+  }
+
+  currentConnectionID = socket.id;
+  backend.emit('connected');
+
   log.debug('connected');
   
   socket.on('mousemove', (vector) => {
@@ -49,13 +62,11 @@ io.on('connection', (socket) => {
   socket.on('scrollup', () => {
     log.debug('scrollup');
     robot.keyTap('up');
-    // robot.scrollMouse(50, "up");
   });
 
   socket.on('scrolldown', () => {
     log.debug('scrolldown');
     robot.keyTap('down');
-    // robot.scrollMouse(50, "down");
   });
 
   socket.on('rightclick', () => {
@@ -63,3 +74,5 @@ io.on('connection', (socket) => {
     robot.mouseClick('right');
   });
 });
+
+module.exports = backend;
