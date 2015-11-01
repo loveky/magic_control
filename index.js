@@ -1,8 +1,11 @@
-var robot = require("robotjs");
+var robot = require('robotjs');
+var Log = require('log');
+var fs = require('fs');
 
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
-var fs = require('fs');
+
+var log = new Log();
 
 app.listen(80);
 
@@ -20,25 +23,26 @@ function handler (req, res) {
 }
 
 io.on('connection', (socket) => {
-  console.log('connected');
+  log.debug('connected');
+  
   socket.on('mousemove', (vector) => {
-    console.log('mousemove');
+    log.debug('mousemove');
     var currentPosition = robot.getMousePos();
     robot.moveMouse(currentPosition.x + vector.x, currentPosition.y + vector.y);
   });
 
   socket.on('click', () => {
-    console.log('click');
+    log.debug('click');
     robot.mouseClick();
   });
 
   socket.on('previous', () => {
-    console.log('previous');
+    log.debug('previous');
     robot.keyTap('left');
   });
 
   socket.on('next', () => {
-    console.log('next');
+    log.debug('next');
     robot.keyTap('right');
   });
 });
