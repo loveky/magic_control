@@ -38,8 +38,7 @@
     <script>
       var socket = io('http://192.168.1.5');
       var mc = new Hammer(document.getElementById('touch-area'));
-      // mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-      // mc.get('swip').set({ direction: Hammer.DIRECTION_ALL });
+
       mc.remove(['doubletap', 'pinch', 'rotate']);
 
       var scroll = new Hammer.Pan({event: 'scroll', pointers: 2, direction: Hammer.DIRECTION_VERTICAL});

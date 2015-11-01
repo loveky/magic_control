@@ -1,13 +1,15 @@
 var robot = require('robotjs');
 var Log = require('log');
 var fs = require('fs');
-var EventEmitter = require('events');
+
+var getParent = require('./ipc');
 
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 
+
 var log = new Log();
-var backend = new EventEmitter();
+var parent = getParent(process);
 
 app.listen(80);
 
@@ -34,7 +36,7 @@ io.on('connection', (socket) => {
   }
 
   currentConnectionID = socket.id;
-  backend.emit('connected');
+  parent.emit('connected');
 
   log.debug('connected');
   
@@ -74,5 +76,3 @@ io.on('connection', (socket) => {
     robot.mouseClick('right');
   });
 });
-
-module.exports = backend;

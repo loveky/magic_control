@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "electron ./app"
   },
   "author": "loveky",
   "license": "ISC",
@@ -14,7 +14,5 @@
     "robotjs": "^0.3.2",
     "socket.io": "^1.3.7"
   },
-  "scripts": {
-    "dev": "electron ./app"
-  }
+  "devDependencies": {}
 }

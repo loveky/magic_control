@@ -4,19 +4,43 @@
     window.jQuery = window.$ = require('./lib/jquery.min.js');
   </script>
   <script type="text/javascript" src="./lib/jquery.qrcode.min.js"></script>
+
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'microsoft yahei';
+    }
+
+    #qrcode {
+      width: 276px;
+      height: 276px;
+      margin: 42px 52px 5px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 18px;
+      color: #353535;
+      font-family: 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, Arial, sans-serif;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-  <h1>xx</h1>
   <div id="qrcode"></div>
+  <p>Scan QR code to connect</p>
   <script>
     var ipc = require('ipc');
 
-
     ipc.on('ip', function (ip) {
-      $('#qrcode').qrcode('http://' + ip);
-      // TODO 生成地址二维码
+      $('#qrcode').qrcode({text: 'http://' + ip, width: 276, height: 276});
     });
     ipc.send('ip');
+
+    ipc.on('connected', function () {
+      alert(1);
+    });
   </script>
 </body>
 </html>
