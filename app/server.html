@@ -1,13 +1,19 @@
 <html>
-<head></head>
+<head>
+  <script type="text/javascript">
+    window.jQuery = window.$ = require('./lib/jquery.min.js');
+  </script>
+  <script type="text/javascript" src="./lib/jquery.qrcode.min.js"></script>
+</head>
 <body>
   <h1>xx</h1>
-
+  <div id="qrcode"></div>
   <script>
     var ipc = require('ipc');
 
 
-    ipc.on('ip', function () {
+    ipc.on('ip', function (ip) {
+      $('#qrcode').qrcode('http://' + ip);
       // TODO 生成地址二维码
     });
     ipc.send('ip');

@@ -2,7 +2,8 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 var ipc = require('ipc');
 
-var backend = require('./backend');
+// var backend = require('./backend');
+var getIP = require('./getIP');
 
 var mainWindow = null;
 
@@ -19,6 +20,5 @@ app.on('ready', function() {
 });
 
 ipc.on('ip', function (event) {
-
-	event.sender.send('ip', 'IP address');
+  event.sender.send('ip', getIP());
 });
