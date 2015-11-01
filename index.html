@@ -40,11 +40,19 @@
       var mc = new Hammer(document.getElementById('touch-area'));
       // mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
       // mc.get('swip').set({ direction: Hammer.DIRECTION_ALL });
+      mc.remove(['doubletap', 'pinch', 'rotate']);
+
       var scroll = new Hammer.Pan({event: 'scroll', pointers: 2, direction: Hammer.DIRECTION_VERTICAL});
+      var rightclick = new Hammer.Tap({event: 'rightclick', pointers: 2});
 
       mc.add(scroll);
+      mc.add(rightclick);
 
       socket.on('connect', function () {
+        mc.on('rightclick', function () {
+          socket.emit('rightclick');
+        });
+
         mc.on('tap', function () {
           socket.emit('click');
         });
@@ -64,6 +72,8 @@
 
           event.deltaY < 0 ? socket.emit('scrollup') : socket.emit('scrolldown');
         });
+
+
       });
     </script>
   </body>

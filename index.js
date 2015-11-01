@@ -57,4 +57,9 @@ io.on('connection', (socket) => {
     robot.keyTap('down');
     // robot.scrollMouse(50, "down");
   });
+
+  socket.on('rightclick', () => {
+    log.debug('rightclick');
+    robot.mouseClick('right');
+  });
 });
