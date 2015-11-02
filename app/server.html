@@ -15,11 +15,10 @@
     #qrcode {
       width: 276px;
       height: 276px;
-      margin: 42px 52px 5px;
+      margin: 32px 52px 25px;
     }
 
     p {
-      padding-top: 20px;
       text-align: center;
       font-size: 18px;
       color: #353535;
@@ -37,6 +36,7 @@
     <p>You are connected to your PC</p>
     <p>Enjoy!</p>
   </div>
+  <p><a id="refresh-token" href="#">Refresh Token</a></p>
   <script>
     var ipc = require('ipc');
     var $beforeConnect = $('.before-connect');
@@ -53,10 +53,12 @@
       ipc.send('refreshToken');
     };
 
+    $('#refresh-token').bind('click', onDisconnected);
+
     onDisconnected();
 
     ipc.on('refreshToken', function (url) {
-      $('#qrcode').qrcode({text: url, width: 276, height: 276});
+      $('#qrcode').empty().qrcode({text: url, width: 276, height: 276});
     });
 
     ipc.on('connected', onConnected);
