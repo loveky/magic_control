@@ -20,8 +20,15 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 380, height: 500, title: 'MagicControl', 'use-content-size': true});
+  mainWindow = new BrowserWindow({
+    width: 380,
+    height: 400,
+    title: 'MagicControl',
+    'use-content-size': true,
+    resizable: false
+  });
   mainWindow.loadUrl('file://' + __dirname + '/server.html');
+  mainWindow.setMenu(null);
   mainWindow.on('closed', function() {
     mainWindow = null;
   });

@@ -19,28 +19,48 @@
     }
 
     p {
+      padding-top: 20px;
       text-align: center;
       font-size: 18px;
       color: #353535;
-      font-family: 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, Arial, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
       line-height: 1.6;
     }
   </style>
 </head>
 <body>
-  <div id="qrcode"></div>
-  <p>Scan QR code to connect</p>
+  <div class="before-connect">
+    <div id="qrcode"></div>
+    <p>Scan QR code to connect</p>
+  </div>
+  <div class="after-connect">
+    <p>You are connected to your PC</p>
+    <p>Enjoy!</p>
+  </div>
   <script>
     var ipc = require('ipc');
+    var $beforeConnect = $('.before-connect');
+    var $afterConnect = $('.after-connect');
+
+    var onConnected = function () {
+      $beforeConnect.hide();
+      $afterConnect.show();
+    };
+
+    var onDisconnected = function () {
+      $beforeConnect.show();
+      $afterConnect.hide();
+      ipc.send('ip');
+    };
+
+    onDisconnected();
 
     ipc.on('ip', function (ip) {
       $('#qrcode').qrcode({text: 'http://' + ip, width: 276, height: 276});
     });
-    ipc.send('ip');
 
-    ipc.on('connected', function () {
-      alert(1);
-    });
+    ipc.on('connected', onConnected);
+    ipc.on('disconnected', onDisconnected);
   </script>
 </body>
 </html>
