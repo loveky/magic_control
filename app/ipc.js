@@ -2,7 +2,6 @@ var Emitter = require('events');
 
 module.exports = IPC;
 
-
 function IPC(process) {
   var emitter = new Emitter();
   var emit = emitter.emit;
