@@ -50,13 +50,13 @@
     var onDisconnected = function () {
       $beforeConnect.show();
       $afterConnect.hide();
-      ipc.send('ip');
+      ipc.send('refreshToken');
     };
 
     onDisconnected();
 
-    ipc.on('ip', function (ip) {
-      $('#qrcode').qrcode({text: 'http://' + ip, width: 276, height: 276});
+    ipc.on('refreshToken', function (url) {
+      $('#qrcode').qrcode({text: url, width: 276, height: 276});
     });
 
     ipc.on('connected', onConnected);

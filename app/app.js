@@ -36,8 +36,11 @@ app.on('ready', function() {
   });
 });
 
-ipc.on('ip', function (event) {
-  event.sender.send('ip', getIP());
+ipc.on('refreshToken', function (event) {
+  var token = Math.random();
+
+  event.sender.send('refreshToken', 'http://' + getIP() + '/?token=' + token);
+  backend.emit('refreshToken', token);
 });
 
 backend.on('connected', function () {

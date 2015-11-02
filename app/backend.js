@@ -26,53 +26,68 @@ function handler (req, res) {
   });
 }
 
-var currentConnectionID = null;
+var currentConnection = null;
+var currentToken = null;
+
+parent.on('refreshToken', function (token) {
+  currentToken = token;
+  if (currentConnection !== null) {
+    currentConnection.emit('token refreshed');
+  }
+});
 
 io.on('connection', (socket) => {
-
-  if (currentConnectionID !== null) {
+  if (currentConnection !== null) {
     socket.emit('server busy');
     return;
   }
 
-  currentConnectionID = socket.id;
-  parent.emit('connected');
+  socket.on('auth', (token) => {
+    if (token != currentToken) {
+      socket.emit('token refreshed');
+      return;
+    }
 
-  log.debug('connected');
-  
-  socket.on('mousemove', (vector) => {
-    log.debug('mousemove');
-    var currentPosition = robot.getMousePos();
-    robot.moveMouse(currentPosition.x + vector.x, currentPosition.y + vector.y);
-  });
+    socket.emit('auth');
+    currentConnection = socket;
+    parent.emit('connected');
 
-  socket.on('click', () => {
-    log.debug('click');
-    robot.mouseClick();
-  });
+    log.debug('connected');
+    
+    socket.on('mousemove', (vector) => {
+      log.debug('mousemove');
+      var currentPosition = robot.getMousePos();
+      robot.moveMouse(currentPosition.x + vector.x, currentPosition.y + vector.y);
+    });
 
-  socket.on('previous', () => {
-    log.debug('previous');
-    robot.keyTap('left');
-  });
+    socket.on('click', () => {
+      log.debug('click');
+      robot.mouseClick();
+    });
 
-  socket.on('next', () => {
-    log.debug('next');
-    robot.keyTap('right');
-  });
+    socket.on('previous', () => {
+      log.debug('previous');
+      robot.keyTap('left');
+    });
 
-  socket.on('scrollup', () => {
-    log.debug('scrollup');
-    robot.keyTap('up');
-  });
+    socket.on('next', () => {
+      log.debug('next');
+      robot.keyTap('right');
+    });
 
-  socket.on('scrolldown', () => {
-    log.debug('scrolldown');
-    robot.keyTap('down');
-  });
+    socket.on('scrollup', () => {
+      log.debug('scrollup');
+      robot.keyTap('up');
+    });
 
-  socket.on('rightclick', () => {
-    log.debug('rightclick');
-    robot.mouseClick('right');
+    socket.on('scrolldown', () => {
+      log.debug('scrolldown');
+      robot.keyTap('down');
+    });
+
+    socket.on('rightclick', () => {
+      log.debug('rightclick');
+      robot.mouseClick('right');
+    });
   });
 });
