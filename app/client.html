@@ -36,7 +36,7 @@
       <div id="touch-area"></div>
     </div>
     <script>
-      var socket = io('http://10.0.16.115');
+      var socket = io(window.location.href);
       var mc = new Hammer(document.getElementById('touch-area'));
 
       mc.remove(['doubletap', 'pinch', 'rotate']);

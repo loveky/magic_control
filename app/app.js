@@ -16,6 +16,8 @@ backendProcess.on('error', function (err) {
 var backend = getBackend(backendProcess);
 
 app.on('window-all-closed', function() {
+  backendProcess.disconnect();
+  backendProcess.kill();
   app.quit();
 });
 
