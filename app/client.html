@@ -47,6 +47,12 @@
       mc.add(scroll);
       mc.add(rightclick);
 
+      socket.on('server busy', function () {
+        socket.io.reconnection(false);
+        socket.disconnect();
+        alert('Another device has connectted to this PC');
+      });
+
       socket.on('connect', function () {
         mc.on('rightclick', function () {
           socket.emit('rightclick');
@@ -74,4 +80,4 @@
       });
     </script>
   </body>
-</html>
+</html> 

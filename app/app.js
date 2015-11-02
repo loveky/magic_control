@@ -25,7 +25,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({
     width: 380,
     height: 400,
-    title: 'MagicControl',
+    title: 'Magic Control',
     'use-content-size': true,
     resizable: false
   });

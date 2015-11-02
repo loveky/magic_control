@@ -31,7 +31,7 @@ var currentConnectionID = null;
 io.on('connection', (socket) => {
 
   if (currentConnectionID !== null) {
-    // TODO 断开socket并返回错误信息
+    socket.emit('server busy');
     return;
   }
 
