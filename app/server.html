@@ -25,20 +25,37 @@
       font-family: 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
       line-height: 1.6;
     }
+
+    p.footer {
+      width: 100%;
+      font-size: 12px;
+      line-height: 14px;
+      position: absolute;
+      bottom: 5px;
+    }
+
+    .refresh-token {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="before-connect">
-    <div id="qrcode"></div>
+    <div id="qrcode" class="refresh-token" title="Click to refresh token"></div>
     <p>Scan QR code to connect</p>
+    <p class="footer">
+      source code on <a class="external-link" data-link="https://github.com/loveky/magic_control" href="javascript:void(0)">GitHub</a></br>
+      built by <a class="external-link" data-link="https://github.com/loveky" href="javascript:void(0)">@loveky</a>
+    </p>
   </div>
   <div class="after-connect">
     <p>You are connected to your PC</p>
     <p>Enjoy!</p>
+    <p><a class="refresh-token" href="#">Refresh Token</a></p>
   </div>
-  <p><a id="refresh-token" href="#">Refresh Token</a></p>
   <script>
     var ipc = require('ipc');
+    var shell = require('shell');
     var $beforeConnect = $('.before-connect');
     var $afterConnect = $('.after-connect');
 
@@ -53,7 +70,7 @@
       ipc.send('refreshToken');
     };
 
-    $('#refresh-token').bind('click', onDisconnected);
+    $('.refresh-token').bind('click', onDisconnected);
 
     onDisconnected();
 
@@ -63,6 +80,14 @@
 
     ipc.on('connected', onConnected);
     ipc.on('disconnected', onDisconnected);
+
+    $('body').delegate('a', 'click', function () {
+      var link = $(this).data('link');
+      
+      if (link.length > 0) {
+        shell.openExternal(link);
+      }
+    });
   </script>
 </body>
 </html>
