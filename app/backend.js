@@ -1,5 +1,6 @@
 var robot = require('robotjs');
 var fs = require('fs');
+var Console = require('console').Console;
 
 var getParent = require('./ipc');
 
@@ -8,8 +9,11 @@ var io = require('socket.io')(app);
 
 var parent = getParent(process);
 
-app.listen(80);
+var logStream = fs.createWriteStream(__dirname + '/logs/backend.log');
+var logger = new Console(logStream, logStream);
 
+app.listen(8294);
+logger.log('Backend running on port 8294...');
 function handler (req, res) {
   fs.readFile(__dirname + '/client.html',
   function (err, data) {

@@ -1,16 +1,23 @@
 var app = require('app');
 var BrowserWindow = require('browser-window');
 var ipc = require('ipc');
+var fs = require('fs');
 var child_process = require('child_process'); 
+var Console = require('console').Console;
 
 var getBackend = require('./ipc');
 var getIP = require('./getIP');
+
+var logStream = fs.createWriteStream(__dirname + '/logs/app.log');
+var logger = new Console(logStream, logStream);
+
 
 var mainWindow = null;
 
 var backendProcess = child_process.spawn('node', ['./app/backend.js'], {stdio: [null, null, null, 'ipc'] });
 backendProcess.on('error', function (err) {
-  console.log('Failed to start child process.');
+  logger.log('Failed to start child process.');
+  logger.log(err)
 });
 
 var backend = getBackend(backendProcess);
@@ -38,8 +45,8 @@ app.on('ready', function() {
 
 ipc.on('refreshToken', function (event) {
   var token = Math.random();
-
-  event.sender.send('refreshToken', 'http://' + getIP() + '/?token=' + token);
+  logger.log('http://' + getIP() + ':8294/?token=' + token);
+  event.sender.send('refreshToken', 'http://' + getIP() + ':8294/?token=' + token);
   backend.emit('refreshToken', token);
 });
 

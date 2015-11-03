@@ -4,15 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "electron ./app"
+    "dev": "electron ./app",
+    "clean": "rm -fr ./dist/*",
+    "build": "npm run clean && electron-packager ./app \"MagicControl\" --out=dist/win32 --platform=win32 --arch=x64 --version=0.33.0 --icon=assets/win32/icon.ico",
+    "pack": "npm run build && electron-builder \"dist/win32/MagicControl-win32-x64\" --platform=win --out=\"dist/win32\" --config=packager.json"
   },
   "author": "loveky",
   "license": "ISC",
   "dependencies": {
     "electron-prebuilt": "^0.33.0",
-    "log": "^1.4.0",
     "robotjs": "^0.3.2",
     "socket.io": "^1.3.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "electron-builder": "^2.1.1",
+    "electron-packager": "^5.1.1",
+    "electron-rebuild": "^1.0.2"
+  }
 }

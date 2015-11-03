@@ -1,0 +1,6 @@
+{
+  "win" : {
+    "title" : "MagicControl",
+    "icon" : "assets/win32/icon.ico"
+  }
+}
