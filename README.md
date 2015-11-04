@@ -14,7 +14,7 @@ npm install
 cd app
 npm install
 ```
-_Note: Visual Studio 2013 & Python are needed to [compile robotjs](https://github.com/octalmage/robotjs#installation)._
+_Note: make sure you have the [required dependencies](https://github.com/octalmage/robotjs#installation)  before installing `robotjs`_
 
 Step3 Rebuild electron to make it works with robotjs.
 ```bash
