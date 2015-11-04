@@ -1,19 +1,19 @@
-var app = require('app');
-var BrowserWindow = require('browser-window');
-var ipc = require('ipc');
-var fs = require('fs');
-var child_process = require('child_process'); 
-var Console = require('console').Console;
+'use strict';
 
-var backend = require('./backend');
-var getBackend = require('./ipc');
-var getIP = require('./getIP');
+const app = require('app');
+const BrowserWindow = require('browser-window');
+const ipc = require('ipc');
+const fs = require('fs');
+const Console = require('console').Console;
 
-var logStream = fs.createWriteStream(__dirname + '/logs/app.log');
-var logger = new Console(logStream, logStream);
+const backend = require('./backend');
+const getIP = require('./getIP');
+
+const logStream = fs.createWriteStream(__dirname + '/logs/app.log');
+const logger = new Console(logStream, logStream);
 
 
-var mainWindow = null;
+let mainWindow = null;
 
 app.on('window-all-closed', function() {
   app.quit();
@@ -35,7 +35,7 @@ app.on('ready', function() {
 });
 
 ipc.on('refreshToken', function (event) {
-  var token = Math.random();
+  let token = Math.random();
   logger.log('http://' + getIP() + ':8294/?token=' + token);
   event.sender.send('refreshToken', 'http://' + getIP() + ':8294/?token=' + token);
   backend.emit('refreshToken', token);

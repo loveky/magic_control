@@ -1,16 +1,19 @@
-var robot = require('robotjs');
-var fs = require('fs');
-var Console = require('console').Console;
-var EventEmitter = require('events').EventEmitter;
+'use strict';
 
-var app = require('http').createServer(handler)
-var io = require('socket.io')(app);
-var backend = new EventEmitter();
-var logStream = fs.createWriteStream(__dirname + '/logs/backend.log');
-var logger = new Console(logStream, logStream);
+const robot = require('robotjs');
+const fs = require('fs');
+const Console = require('console').Console;
+const EventEmitter = require('events').EventEmitter;
+
+const app = require('http').createServer(handler)
+const io = require('socket.io')(app);
+const backend = new EventEmitter();
+const logStream = fs.createWriteStream(__dirname + '/logs/backend.log');
+const logger = new Console(logStream, logStream);
 
 app.listen(8294);
 logger.log('Backend running on port 8294...');
+
 function handler (req, res) {
   fs.readFile(__dirname + '/client.html',
   function (err, data) {
@@ -24,8 +27,8 @@ function handler (req, res) {
   });
 }
 
-var currentConnection = null;
-var currentToken = null;
+let currentConnection = null;
+let currentToken = null;
 
 backend.on('refreshToken', function (token) {
   currentToken = token;
@@ -51,7 +54,7 @@ io.on('connection', (socket) => {
     backend.emit('connected');
     
     socket.on('mousemove', (vector) => {
-      var currentPosition = robot.getMousePos();
+      let currentPosition = robot.getMousePos();
       robot.moveMouse(currentPosition.x + vector.x, currentPosition.y + vector.y);
     });
 
