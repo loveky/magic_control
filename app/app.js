@@ -5,6 +5,7 @@ var fs = require('fs');
 var child_process = require('child_process'); 
 var Console = require('console').Console;
 
+var backend = require('./backend');
 var getBackend = require('./ipc');
 var getIP = require('./getIP');
 
@@ -14,17 +15,7 @@ var logger = new Console(logStream, logStream);
 
 var mainWindow = null;
 
-var backendProcess = child_process.spawn('node', ['./app/backend.js'], {stdio: [null, null, null, 'ipc'] });
-backendProcess.on('error', function (err) {
-  logger.log('Failed to start child process.');
-  logger.log(err)
-});
-
-var backend = getBackend(backendProcess);
-
 app.on('window-all-closed', function() {
-  backendProcess.disconnect();
-  backendProcess.kill();
   app.quit();
 });
 

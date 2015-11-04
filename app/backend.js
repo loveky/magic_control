@@ -1,14 +1,11 @@
 var robot = require('robotjs');
 var fs = require('fs');
 var Console = require('console').Console;
-
-var getParent = require('./ipc');
+var EventEmitter = require('events').EventEmitter;
 
 var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
-
-var parent = getParent(process);
-
+var backend = new EventEmitter();
 var logStream = fs.createWriteStream(__dirname + '/logs/backend.log');
 var logger = new Console(logStream, logStream);
 
@@ -30,7 +27,7 @@ function handler (req, res) {
 var currentConnection = null;
 var currentToken = null;
 
-parent.on('refreshToken', function (token) {
+backend.on('refreshToken', function (token) {
   currentToken = token;
   if (currentConnection !== null) {
     currentConnection.emit('token refreshed');
@@ -51,7 +48,7 @@ io.on('connection', (socket) => {
 
     socket.emit('auth');
     currentConnection = socket;
-    parent.emit('connected');
+    backend.emit('connected');
     
     socket.on('mousemove', (vector) => {
       var currentPosition = robot.getMousePos();
@@ -83,3 +80,5 @@ io.on('connection', (socket) => {
     });
   });
 });
+
+module.exports = backend;

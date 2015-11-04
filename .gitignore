@@ -1,2 +1,5 @@
 node_modules/
 dist/win32/
+app/node_modules/
+app/logs/*.log
+app/npm-debug.log
