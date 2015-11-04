@@ -2,7 +2,7 @@
 Control your PC with your SmartPhone
 
 ### Development
-I'm use node 4.2.1 & npm 3.x
+I'm using `node 4.2.1` & `npm 3.x`
 
 Step1 Clone this repo to you local disk.
 
