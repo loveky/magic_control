@@ -1,6 +1,11 @@
 # Magic Control
 Control your PC with your SmartPhone
 
+### This is built on
+<img src="http://electron.atom.io/images/electron-logo.svg" height="43">       
+<img src="http://cdn.socket.io/website/imgs/logo.svg" height="43">       
+<img src="https://camo.githubusercontent.com/ab0771e05fd85f2c4c7ceaf490055d8b0e4b4deb/68747470733a2f2f636c6475702e636f6d2f3141544466324a4d74762e706e67" height="35">    
+
 ### Development
 I'm using `node 4.2.1` & `npm 3.x`
 
