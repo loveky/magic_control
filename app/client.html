@@ -36,6 +36,11 @@
       <div id="touch-area"></div>
     </div>
     <script>
+      var disconnectionReason = {
+        'token refreshed': '',
+        'server busy': ''
+      };
+
       var mc = new Hammer(document.getElementById('touch-area'));
 
       // custom gesture
@@ -47,18 +52,12 @@
 
       var socket = io(window.location.href);
 
-      // PC is already connected from other device
-      socket.on('server busy', function () {
+      // server asks for disconnection
+      socket.on('disconnect', function (reason) {
         socket.io.reconnection(false);
         socket.disconnect();
-        alert('Another device has connectted to this PC');
-      });
 
-      // token refreshed
-      socket.on('token refreshed', function () {
-        socket.io.reconnection(false);
-        socket.disconnect();
-        alert('Please re-scan the QR code on PC');        
+        alert(disconnectionReason[reason]);
       });
 
       socket.on('connect', function () {
@@ -94,7 +93,7 @@
           socket.emit('auth', token[1]);
         }
         else {
-          alert('Please re-scan the QR code on PC');
+          alert(disconnectionReason['token refreshed']);
         }
       });
     </script>

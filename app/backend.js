@@ -33,19 +33,19 @@ let currentToken = null;
 backend.on('refreshToken', function (token) {
   currentToken = token;
   if (currentConnection !== null) {
-    currentConnection.emit('token refreshed');
+    currentConnection.emit('disconnect', 'token refreshed');
   }
 });
 
 io.on('connection', (socket) => {
   if (currentConnection !== null) {
-    socket.emit('server busy');
+    socket.emit('disconnect', 'server busy');
     return;
   }
 
   socket.on('auth', (token) => {
     if (token != currentToken) {
-      socket.emit('token refreshed');
+      socket.emit('disconnect', 'token refreshed');
       return;
     }
 
